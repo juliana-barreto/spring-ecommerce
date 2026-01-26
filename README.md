@@ -15,7 +15,7 @@ Com a aplicação rodando, acesse a documentação interativa para testar os end
 | :--- | :--- | :--- |
 | `POST` | `/clientes` | Cadastra um novo cliente |
 | `GET` | `/clientes` | Lista todos os clientes |
-| `POST` | `/pedidos` | Cria um novo pedido (com cálculo automático) |
+| `POST` | `/pedidos` | Cria um novo pedido |
 | `GET` | `/pedidos/{id}` | Busca detalhes de um pedido |
 
 ## 🛠 Built With
