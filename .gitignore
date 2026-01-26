@@ -1,10 +1,28 @@
-HELP.md
+### Maven ###
 target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+dependency-reduced-pom.xml
 
-### STS ###
+# IMPORTANTE: Nunca ignorar o JAR do wrapper.
+!/.mvn/wrapper/maven-wrapper.jar
+
+### Spring Boot ###
+# Logs de execução
+*.log
+# Arquivos temporários de live reload
+.mtj.tmp/
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+### STS / Eclipse ###
 .apt_generated
 .classpath
 .factorypath
@@ -12,12 +30,10 @@ target/
 .settings
 .springBeans
 .sts4-cache
+bin/
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
+### VS Code ###
+.vscode/
 
 ### NetBeans ###
 /nbproject/private/
@@ -26,8 +42,8 @@ target/
 /nbdist/
 /.nb-gradle/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
-.vscode/
+### Sistema Operacional ###
+.DS_Store
+Thumbs.db
+*~
