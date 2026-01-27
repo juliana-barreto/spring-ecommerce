@@ -1,30 +1,42 @@
-# 🛒 E-commerce API 
-API RESTful desenvolvida como projeto final do curso de Desenvolvimento Back-end do SENAI. O sistema gerencia o fluxo de clientes e pedidos de um e-commerce, aplicando boas práticas de arquitetura, validações de negócio e tratamento de erros.
+# E-commerce API 
 
-Este projeto tem como objetivo demonstrar a construção de uma aplicação robusta utilizando Java e Spring Boot. O sistema permite o cadastro de clientes e a realização de pedidos com cálculo automático de valores, garantindo a integridade dos dados através de relacionamentos em banco de dados relacional.
+Esta API RESTful foi desenvolvida como o **projeto final do curso de Desenvolvimento Back-end do SENAI**. O sistema é responsável por gerenciar o fluxo operacional de um e-commerce, focando na gestão de clientes e processamento de pedidos.
 
-## 📖 Documentação da API (Swagger)
+O projeto demonstra a aplicação de conhecimentos avançados em Java e Spring Boot, priorizando:
+* **Arquitetura:** Organização clara de responsabilidades entre as camadas (Controller, Service, Repository).
+* **Regras de Negócio:** Cálculo automático de valores e validações de integridade.
+* **Persistência:** Relacionamentos complexos em banco de dados relacional com Hibernate.
 
-Com a aplicação rodando, acesse a documentação interativa para testar os endpoints:
+## Funcionalidades Principais
 
-👉 [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+* **Gestão de Clientes:** CRUD completo com validações de dados.
+* **Fluxo de Pedidos:** Registro de vendas com vinculação automatizada a clientes existentes.
+* **Cálculo de Valores:** Lógica interna para processamento de totais de pedidos.
+* **Tratamento de Erros:** Respostas HTTP padronizadas para exceções de negócio e falhas de sistema.
 
-### Exemplos de Endpoints
+## Tecnologias e Ferramentas
+
+<div align="left">
+  <img src="https://img.shields.io/badge/Java_21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" />
+  <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white" />
+  <img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white" />
+  <img src="https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white" />
+  <img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" />
+  <img src="https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apache-maven&logoColor=white" />
+</div>
+
+## 4. Documentação da API (Swagger)
+
+A API utiliza o **Swagger** para fornecer uma interface interativa de testes. Com a aplicação em execução, você pode explorar todos os endpoints disponíveis.
+
+* **URL Local:** [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+
+### Principais Endpoints
 
 | Método | Rota | Descrição |
 | :--- | :--- | :--- |
-| `POST` | `/clientes` | Cadastra um novo cliente |
-| `GET` | `/clientes` | Lista todos os clientes |
-| `POST` | `/pedidos` | Cria um novo pedido |
-| `GET` | `/pedidos/{id}` | Busca detalhes de um pedido |
+| `POST` | `/clientes` | Cadastra um novo cliente no sistema. |
+| `GET` | `/clientes` | Retorna a lista de todos os clientes cadastrados. |
+| `POST` | `/pedidos` | Cria um novo pedido vinculado a um cliente. |
+| `GET` | `/pedidos/{id}` | Busca os detalhes completos de um pedido específico. |
 
-## 🛠 Built With
-
-<div style="display: inline_block"><br>
-  <img align="center" src="https://img.shields.io/badge/Java_21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" />
-  <img align="center" src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white" />
-  <img align="center" src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white" />
-  <img align="center" src="https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white" />
-  <img align="center" src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" />
-  <img align="center" src="https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apache-maven&logoColor=white" />
-</div>
