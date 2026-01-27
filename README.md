@@ -25,7 +25,7 @@ O projeto demonstra a aplicação de conhecimentos avançados em Java e Spring B
   <img src="https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apache-maven&logoColor=white" />
 </div>
 
-## 4. Documentação da API (Swagger)
+## Documentação da API
 
 A API utiliza o **Swagger** para fornecer uma interface interativa de testes. Com a aplicação em execução, você pode explorar todos os endpoints disponíveis.
 
