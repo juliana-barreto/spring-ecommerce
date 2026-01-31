@@ -1,4 +1,4 @@
-package com.senai.ecommerce.modules.user;
+package com.juliana_barreto.ecommerce.modules.user;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

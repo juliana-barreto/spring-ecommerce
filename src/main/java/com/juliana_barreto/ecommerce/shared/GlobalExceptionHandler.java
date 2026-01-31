@@ -1,7 +1,7 @@
-package com.senai.ecommerce.shared;
+package com.juliana_barreto.ecommerce.shared;
 
-import com.senai.ecommerce.shared.exceptions.InvalidDataException;
-import com.senai.ecommerce.shared.exceptions.ResourceNotFoundException;
+import com.juliana_barreto.ecommerce.shared.exceptions.InvalidDataException;
+import com.juliana_barreto.ecommerce.shared.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;

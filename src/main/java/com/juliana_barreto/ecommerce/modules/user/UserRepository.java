@@ -1,4 +1,4 @@
-package com.senai.ecommerce.modules.user;
+package com.juliana_barreto.ecommerce.modules.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

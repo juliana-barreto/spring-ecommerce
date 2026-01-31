@@ -1,6 +1,6 @@
-package com.senai.ecommerce.modules.order;
+package com.juliana_barreto.ecommerce.modules.order;
 
-import com.senai.ecommerce.modules.user.User;
+import com.juliana_barreto.ecommerce.modules.user.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

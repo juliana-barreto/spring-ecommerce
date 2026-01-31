@@ -1,4 +1,4 @@
-package com.senai.ecommerce.shared.exceptions;
+package com.juliana_barreto.ecommerce.shared.exceptions;
 
 public class InvalidDataException extends RuntimeException {
 

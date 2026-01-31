@@ -1,4 +1,4 @@
-package com.senai.ecommerce.modules.order;
+package com.juliana_barreto.ecommerce.modules.order;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

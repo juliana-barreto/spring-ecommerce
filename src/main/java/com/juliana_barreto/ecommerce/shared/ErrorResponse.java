@@ -1,4 +1,4 @@
-package com.senai.ecommerce.shared;
+package com.juliana_barreto.ecommerce.shared;
 
 import java.time.LocalDateTime;
 

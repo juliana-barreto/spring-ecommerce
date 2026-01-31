@@ -1,6 +1,6 @@
-package com.senai.ecommerce.modules.user;
+package com.juliana_barreto.ecommerce.modules.user;
 
-import com.senai.ecommerce.shared.exceptions.ResourceNotFoundException;
+import com.juliana_barreto.ecommerce.shared.exceptions.ResourceNotFoundException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
