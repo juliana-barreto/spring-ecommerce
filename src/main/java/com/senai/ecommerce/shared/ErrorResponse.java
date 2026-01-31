@@ -2,11 +2,11 @@ package com.senai.ecommerce.shared;
 
 import java.time.LocalDateTime;
 
-public record RespostaErro(
+public record ErrorResponse(
     LocalDateTime timestamp,
     Integer status,
-    String erro,
-    String mensagem,
+    String error,
+    String message,
     String path
 ) {
 

@@ -1,4 +1,4 @@
-package com.senai.ecommerce.modules.pedido;
+package com.senai.ecommerce.modules.order;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,23 +17,23 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ItemPedido {
+public class OrderItem {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(nullable = false)
-  private String nomeProduto;
+  private String productName;
 
   @Column(nullable = false)
-  private Integer quantidade;
+  private Integer quantity;
 
   @Column(nullable = false, precision = 10, scale = 2)
-  private BigDecimal precoUnitario;
+  private BigDecimal unitPrice;
 
   @ManyToOne
-  @JoinColumn(name = "pedido_id", nullable = false)
+  @JoinColumn(name = "order_id", nullable = false)
   @JsonIgnore
-  private Pedido pedido;
+  private Order order;
 }

@@ -1,0 +1,62 @@
+package com.senai.ecommerce.modules.order;
+
+import java.net.URI;
+import java.util.List;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+@RestController
+@RequestMapping("/orders")
+@Tag(name = "Orders", description = "Sales order management")
+public class OrderController {
+
+  private final OrderService orderService;
+
+  public OrderController(OrderService orderService) {
+    this.orderService = orderService;
+  }
+
+  @GetMapping
+  @Operation(summary = "List all", description = "Returns all orders")
+  public ResponseEntity<List<Order>> list() {
+    return ResponseEntity.ok(orderService.findAll());
+  }
+
+  @GetMapping("/{id}")
+  @Operation(summary = "Find by ID", description = "Returns a specific order by its ID")
+  public ResponseEntity<Order> findById(@PathVariable Long id) {
+    return ResponseEntity.ok(orderService.findById(id));
+  }
+
+  @PostMapping
+  @Operation(summary = "Create order", description = "Creates a new order for an existing user")
+  public ResponseEntity<Order> create(@RequestBody Order order) {
+    Order newOrder = orderService.create(order);
+    URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{id}").buildAndExpand(newOrder.getId()).toUri();
+    return ResponseEntity.created(uri).body(newOrder);
+  }
+
+  @PutMapping("/{id}")
+  @Operation(summary = "Update order", description = "Updates order status")
+  public ResponseEntity<Order> update(@PathVariable Long id, @RequestBody Order order) {
+    return ResponseEntity.ok(orderService.update(id, order));
+  }
+
+  @DeleteMapping("/{id}")
+  @Operation(summary = "Cancel/Delete order", description = "Removes the order from the system")
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
+    orderService.delete(id);
+    return ResponseEntity.noContent().build();
+  }
+}

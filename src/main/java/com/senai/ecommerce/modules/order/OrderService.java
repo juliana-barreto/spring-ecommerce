@@ -1,0 +1,68 @@
+package com.senai.ecommerce.modules.order;
+
+import com.senai.ecommerce.modules.user.User;
+import org.springframework.stereotype.Service;
+import com.senai.ecommerce.modules.user.UserRepository;
+import com.senai.ecommerce.shared.exceptions.ResourceNotFoundException;
+import java.util.List;
+
+@Service
+public class OrderService {
+
+  private final OrderRepository orderRepository;
+  private final UserRepository userRepository;
+
+  public OrderService(OrderRepository orderRepository, UserRepository userRepository) {
+    this.orderRepository = orderRepository;
+    this.userRepository = userRepository;
+  }
+
+  public List<Order> findAll() {
+    return orderRepository.findAll();
+  }
+
+  public Order findById(Long id) {
+    return orderRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + id));
+  }
+
+  public Order create(Order order) {
+    // Basic validation
+    if (order.getUser() == null || order.getUser().getId() == null) {
+      throw new IllegalArgumentException("The order must be associated with an existing user.");
+    }
+
+    // Fetch the real user from the database to ensure consistency
+    User user = userRepository.findById(order.getUser().getId())
+        .orElseThrow(() -> new ResourceNotFoundException("Order user not found."));
+
+    order.setUser(user);
+
+    // Associate items with the order and calculate total
+    if (order.getItems() != null) {
+      for (OrderItem item : order.getItems()) {
+        item.setOrder(order);
+      }
+    }
+
+    order.calculateTotal(); // Your entity method
+    return orderRepository.save(order);
+  }
+
+  public Order update(Long id, Order updatedData) {
+    Order existingOrder = findById(id);
+
+    if (updatedData.getStatus() != null) {
+      existingOrder.setStatus(updatedData.getStatus());
+    }
+
+    return orderRepository.save(existingOrder);
+  }
+
+  public void delete(Long id) {
+    if (!orderRepository.existsById(id)) {
+      throw new ResourceNotFoundException("Order not found.");
+    }
+    orderRepository.deleteById(id);
+  }
+}

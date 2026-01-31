@@ -1,7 +1,7 @@
-package com.senai.ecommerce.modules.cliente;
+package com.senai.ecommerce.modules.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.senai.ecommerce.modules.pedido.Pedido;
+import com.senai.ecommerce.modules.order.Order;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,21 +19,28 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Cliente {
+public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(nullable = false)
-  private String nome;
+  private String name;
+
   @Column(nullable = false, unique = true)
   private String email;
+
+  @Column(nullable = false, unique = true)
+  private String phone;
+
   @Column(nullable = false, unique = true, length = 11)
   private String cpf;
 
-  @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-  @JsonIgnore
-  private List<Pedido> pedidos = new ArrayList<>();
-}
+  @Column(nullable = false)
+  private String password;
 
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonIgnore
+  private List<Order> orders = new ArrayList<>();
+}
