@@ -1,42 +1,128 @@
-# E-commerce API 
+# E-commerce Backend API - API RESTful de Gestão de Pedidos 
 
-Esta API RESTful foi desenvolvida como o **projeto final do curso de Desenvolvimento Back-end do SENAI**. O sistema é responsável por gerenciar o fluxo operacional de um e-commerce, focando na gestão de clientes e processamento de pedidos.
-
-O projeto demonstra a aplicação de conhecimentos avançados em Java e Spring Boot, priorizando:
-* **Arquitetura:** Organização clara de responsabilidades entre as camadas (Controller, Service, Repository).
-* **Regras de Negócio:** Cálculo automático de valores e validações de integridade.
-* **Persistência:** Relacionamentos complexos em banco de dados relacional com Hibernate.
-
-## Funcionalidades Principais
-
-* **Gestão de Clientes:** CRUD completo com validações de dados.
-* **Fluxo de Pedidos:** Registro de vendas com vinculação automatizada a clientes existentes.
-* **Cálculo de Valores:** Lógica interna para processamento de totais de pedidos.
-* **Tratamento de Erros:** Respostas HTTP padronizadas para exceções de negócio e falhas de sistema.
-
-## Tecnologias e Ferramentas
-
-<div align="left">
-  <img src="https://img.shields.io/badge/Java_21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" />
-  <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white" />
-  <img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white" />
-  <img src="https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white" />
-  <img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" />
-  <img src="https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apache-maven&logoColor=white" />
+<div align="center">
+    <img src="https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=openjdk&logoColor=white" />
+    <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat-square&logo=spring-boot&logoColor=white" />
+    <img src="https://img.shields.io/badge/Swagger-85EA2D?style=flat-square&logo=swagger&logoColor=black" />
+    <img src="https://img.shields.io/badge/PostgreSQL-316192?style=flat-square&logo=postgresql&logoColor=white" />
+    <img src="https://img.shields.io/badge/Status-Concluído-brightgreen?style=flat-square" />
 </div>
 
-## Documentação da API
+---
 
-A API utiliza o **Swagger** para fornecer uma interface interativa de testes. Com a aplicação em execução, você pode explorar todos os endpoints disponíveis.
+## Sobre o Projeto
 
-* **URL Local:** [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+O **E-commerce Backend API** é uma aplicação robusta desenvolvida em **Java** com o framework **Spring Boot**, focada na construção de serviços RESTful escaláveis para gestão de vendas.
 
-### Principais Endpoints
+Este projeto vai além do CRUD básico, implementando **regras de negócio reais** de um e-commerce, como cálculo automático de totais de pedidos, fluxo de status de entrega, relacionamentos complexos entre entidades e **tratamento global de exceções**. O objetivo é demonstrar domínio sobre a arquitetura em camadas e boas práticas de desenvolvimento backend.
 
-| Método | Rota | Descrição |
+## Funcionalidades e Regras de Negócio
+
+A API gerencia todo o ecossistema de pedidos e usuários, documentada via Swagger/OpenAPI.
+
+| Funcionalidade | Status | Descrição |
+| :--- | :---: | :--- |
+| **Gestão de Usuários** | ✅ | Cadastro completo com validação de dados (CPF/Email únicos). |
+| **Ciclo de Pedidos** | ✅ | Criação de pedidos com itens associados e vínculo automático ao cliente. |
+| **Cálculo Automático** | ✅ | O sistema calcula o subtotal (preço x qtd) e o total do pedido no backend. |
+| **Status de Pedido** | ✅ | Controle de fluxo via Enum (Aguardando Pagamento -> Entregue). |
+| **Tratamento de Erros** | ✅ | Respostas de erro padronizadas (JSON) para 404, 400 e 500 via `ControllerAdvice`. |
+
+## Arquitetura e Conceitos Técnicos
+
+A aplicação segue o padrão de arquitetura em camadas (Layered Architecture), garantindo separação de responsabilidades e desacoplamento.
+
+| Componente Backend | Regra de Negócio | Conceito Técnico Aplicado |
 | :--- | :--- | :--- |
-| `POST` | `/clientes` | Cadastra um novo cliente no sistema. |
-| `GET` | `/clientes` | Retorna a lista de todos os clientes cadastrados. |
-| `POST` | `/pedidos` | Cria um novo pedido vinculado a um cliente. |
-| `GET` | `/pedidos/{id}` | Busca os detalhes completos de um pedido específico. |
+| **Entidades (Domain)** | Mapeamento das tabelas do banco e relacionamentos (1:N). | **JPA/Hibernate** (`@Entity`, `@OneToMany`) e **Lombok**. |
+| **Service Layer** | Regras de negócio, como buscar usuário antes de criar pedido e calcular totais. | **Injeção de Dependência** e Transactional Management. |
+| **Exception Handler** | Se um recurso não for encontrado ou dados forem inválidos, a API não "quebra", mas retorna JSON legível. | **Global Exception Handling** (`@RestControllerAdvice`) e **Java Records**. |
+| **DTOs/Records** | Objetos imutáveis para transporte de dados (ex: `ErrorResponse`). | **Java 17+ Records** (Imutabilidade e concisão). |
+| **Documentação** | Exposição dos endpoints para consumo pelo Frontend ou Mobile. | **OpenAPI / Swagger UI**. |
 
+## Diagrama de Classes e Relacionamentos
+
+A estrutura do domínio reflete um relacionamento forte entre Clientes, Pedidos e Itens:
+
+```mermaid
+classDiagram
+class User {
+  - Long id
+  - String name
+  - String email
+  - String cpf
+  - List~Order~ orders
+}
+class Order {
+  - Long id
+  - Instant moment
+  - OrderStatus status
+  - BigDecimal total
+  - User client
+  - List~OrderItem~ items
+  + calculateTotal()
+}
+class OrderItem {
+  - Long id
+  - String productName
+  - Integer quantity
+  - BigDecimal unitPrice
+  - Order order
+  + getSubTotal()
+}
+class OrderStatus {
+  <<enumeration>>
+  AWAITING_PAYMENT
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
+User "1" --> "*" Order : places
+Order "1" *-- "*" OrderItem : contains
+Order ..> OrderStatus : uses
+```
+## Estrutura do ProjetoA organização de pacotes é modular, facilitando a escalabilidade do sistema:
+```Plaintext
+📦 com.juliana_barreto.ecommerce
+ ┣ 📂 modules
+ ┃ ┣ 📂 user            # Controller, Service, Repository e Entity de Usuário
+ ┃ ┗ 📂 order           # Toda lógica relacionada a Pedidos e Itens
+ ┣ 📂 shared
+ ┃ ┣ 📂 exceptions      # Exceções personalizadas
+ ┃ ┗ 📜 GlobalExceptionHandler.java  # Interceptador de erros globais
+ ┗ 📜 EcommerceApplication.java
+```
+## Impacto Técnico e Métricas
+
+| Indicador | Detalhe |
+| :--- | :--- |
+| **Endpoints** | ~9 Endpoints REST (GET, POST, PUT, DELETE) |
+| **Confiabilidade** | Tratamento centralizado de erros HTTP |
+| **Padrões de Projeto** | Singleton (Beans), Factory (implícito no Spring), Strategy (Auth) |
+| **ORM** | Hibernate com Spring Data JPA |
+| **Persistência** | Banco Relacional (Postgres) |
+
+### Como Executar
+
+1. Clone o repositório:
+```bash
+git clone [https://github.com/SEU-USUARIO/ecommerce-backend.git](https://github.com/SEU-USUARIO/ecommerce-backend.git)
+```
+
+2. Configure o banco de dados no arquivo src/main/resources/application.properties.
+
+3. Execute o projeto via Maven:
+
+```Bash
+./mvnw spring-boot:run
+```
+
+4. Acesse a documentação da API (Swagger):
+
+```Plaintext
+
+http://localhost:8080/swagger-ui.html
+```
+
+<div align="center">Desenvolvido com ❤️ por Juliana Barreto.</div>
