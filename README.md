@@ -12,9 +12,9 @@
 
 ## Sobre o Projeto
 
-O **Sistema de Gestão de Pedidos** é uma aplicação robusta desenvolvida em **Java** com o framework **Spring Boot**, focada na construção de serviços RESTful escaláveis para gestão de vendas.
+O Sistema de Gestão de Pedidos é uma aplicação robusta desenvolvida em Java com o framework Spring Boot, focada na construção de serviços RESTful escaláveis para gestão de vendas em um e-commerce.
 
-Este projeto vai além do CRUD básico, implementando **regras de negócio reais** de um e-commerce, como cálculo automático de totais de pedidos, fluxo de status de entrega, relacionamentos complexos entre entidades e **tratamento global de exceções**. O objetivo é demonstrar domínio sobre a arquitetura em camadas e boas práticas de desenvolvimento backend.
+Este projeto transcende o CRUD básico. Ele implementa um modelo de domínio rico que orquestra o fluxo completo de uma venda: desde a catalogação de produtos e categorias, passando pela emissão de pedidos com itens variados, até o processamento do pagamento e mudança de status de entrega. O sistema prioriza a integridade dos dados, regras de negócio reais, relacionamentos complexos entre entidades e tratamento global de exceções. O objetivo é demonstrar domínio sobre a arquitetura em camadas e boas práticas de modelagem de dados no backend.
 
 ## Funcionalidades e Regras de Negócio
 
@@ -22,64 +22,90 @@ A API gerencia todo o ecossistema de pedidos e usuários, documentada via Swagge
 
 | Funcionalidade | Status | Descrição |
 | :--- | :---: | :--- |
-| **Gestão de Usuários** | ✅ | Cadastro completo com validação de dados (CPF/Email únicos). |
+| **Gestão de Usuários** | ✅ | Cadastro completo com validação de dados, garantindo integridade de CPF, Email, Telefone e Senha.|
+| **Catálogo de Produtos** | ✅ | Gerenciamento de produtos e categorização, permitindo organização flexível do inventário.|
 | **Ciclo de Pedidos** | ✅ | Criação de pedidos com itens associados e vínculo automático ao cliente. |
-| **Cálculo Automático** | ✅ | O sistema calcula o subtotal (preço x qtd) e o total do pedido no backend. |
+| **Fluxo de Pagamento** | ✅ | Associação 1:1 entre Pedido e Pagamento, registrando o momento exato da transação financeira. |
+| **Cálculo Automático** | ✅ | O sistema calcula o subtotal (preço do produto x quantidade) e o total do pedido diretamente no domínio. |
 | **Status de Pedido** | ✅ | Controle de fluxo via Enum (Aguardando Pagamento -> Entregue). |
 | **Tratamento de Erros** | ✅ | Respostas de erro padronizadas (JSON) para 404, 400 e 500 via `ControllerAdvice`. |
 
 ## Arquitetura e Conceitos Técnicos
 
-A aplicação segue o padrão de arquitetura em camadas (Layered Architecture), garantindo separação de responsabilidades e desacoplamento.
+A aplicação segue o padrão de arquitetura em camadas, garantindo separação de responsabilidades e desacoplamento entre as regras de negócio e a camada de acesso a dados.
 
 | Componente Backend | Regra de Negócio | Conceito Técnico Aplicado |
 | :--- | :--- | :--- |
 | **Entidades (Domain)** | Mapeamento das tabelas do banco e relacionamentos (1:N). | **JPA/Hibernate** (`@Entity`, `@OneToMany`) e **Lombok**. |
 | **Service Layer** | Regras de negócio, como buscar usuário antes de criar pedido e calcular totais. | **Injeção de Dependência** e Transactional Management. |
 | **Exception Handler** | Se um recurso não for encontrado ou dados forem inválidos, a API não "quebra", mas retorna JSON legível. | **Global Exception Handling** (`@RestControllerAdvice`) e **Java Records**. |
-| **DTOs/Records** | Objetos imutáveis para transporte de dados (ex: `ErrorResponse`). | **Java 17+ Records** (Imutabilidade e concisão). |
+| **DTOs/Records** | Objetos imutáveis para transporte de dados, protegendo a entidade de domínio de exposição direta. | **Java 17+ Records** (Imutabilidade e concisão). |
 | **Documentação** | Exposição dos endpoints para consumo pelo Frontend ou Mobile. | **OpenAPI / Swagger UI**. |
 
 ## Diagrama de Classes e Relacionamentos
 
-A estrutura do domínio reflete um relacionamento forte entre Clientes, Pedidos e Itens:
+A estrutura do domínio reflete um sistema de alta coesão, com relacionamentos fortes entre Clientes, Pedidos, Itens de Pedido e o Catálogo de Produtos:
 
 ```mermaid
 classDiagram
 class User {
-  - Long id
-  - String name
-  - String email
-  - String cpf
-  - List~Order~ orders
+  +Long id
+  +String name
+  +String email
+  +String phone
+  +String cpf
+  +String password
+  +List~Order~ orders
 }
 class Order {
-  - Long id
-  - Instant moment
-  - OrderStatus status
-  - BigDecimal total
-  - User client
-  - List~OrderItem~ items
-  + calculateTotal()
+  +Long id
+  +Instant moment
+  +OrderStatus orderStatus
+  +User client
+  +Payment payment
+  +List~OrderItem~ items
+  +Double total()
+}
+class Category {
+  +Long id
+  +String name
+  +List~Product~ products
+}
+class Product {
+  +Long id
+  +String name
+  +String description
+  +Double price
+  +String imgUrl
+  +List~Category~ categories
+  +List~OrderItem~ items
 }
 class OrderItem {
-  - Long id
-  - String productName
-  - Integer quantity
-  - BigDecimal unitPrice
-  - Order order
-  + getSubTotal()
+  +Integer quantity
+  +Double price
+  +Product product
+  +Order order
+  +Double subTotal()
+}
+class Payment {
+  +Long id
+  +Instant moment
+  +Order order
 }
 class OrderStatus {
   <<enumeration>>
-  AWAITING_PAYMENT
+  WAITING_PAYMENT
   PAID
   SHIPPED
   DELIVERED
   CANCELED
 }
-User "1" --> "*" Order : places
-Order "1" *-- "*" OrderItem : contains
+
+User "1" --> "*" Order : client
+Order "1" --> "0..1" Payment : payment
+Order "1" --> "*" OrderItem : items
+OrderItem "*" --> "1" Product : product
+Product "*" -- "*" Category : categories
 Order ..> OrderStatus : uses
 ```
 ## Estrutura do ProjetoA organização de pacotes é modular, facilitando a escalabilidade do sistema:
@@ -87,18 +113,20 @@ Order ..> OrderStatus : uses
 📦 com.juliana_barreto.ecommerce
  ┣ 📂 modules
  ┃ ┣ 📂 user            # Controller, Service, Repository e Entity de Usuário
- ┃ ┗ 📂 order           # Toda lógica relacionada a Pedidos e Itens
+ ┃ ┣ 📂 order           # Lógica de Pedidos, Pagamentos e Itens
+ ┃ ┗ 📂 product         # Gestão de Produtos e Categorias
  ┣ 📂 shared
+ ┃ ┣ 📂 config          # Configurações de segurança e seeding (TestConfig)
  ┃ ┣ 📂 exceptions      # Exceções personalizadas
- ┃ ┗ 📜 GlobalExceptionHandler.java  # Interceptador de erros globais
+ ┃ ┗ 📜 GlobalExceptionHandler.java
  ┗ 📜 EcommerceApplication.java
 ```
 ## Impacto Técnico e Métricas
 
 | Indicador | Detalhe |
 | :--- | :--- |
-| **Endpoints** | ~9 Endpoints REST (GET, POST, PUT, DELETE) |
-| **Confiabilidade** | Tratamento centralizado de erros HTTP |
+| **Endpoints** | ~15 Endpoints REST (CRUDs completos + Operações de Associação) |
+| **Confiabilidade** | Tratamento centralizado de erros HTTP e validação de input |
 | **Padrões de Projeto** | Singleton (Beans), Factory (implícito no Spring), Strategy (Auth) |
 | **ORM** | Hibernate com Spring Data JPA |
 | **Persistência** | Banco Relacional (Postgres) |
