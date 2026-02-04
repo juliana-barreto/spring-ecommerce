@@ -40,6 +40,7 @@ A aplicação segue o padrão de arquitetura em camadas, garantindo separação 
 | **Service Layer** | Regras de negócio, como buscar usuário antes de criar pedido e calcular totais. | **Injeção de Dependência** e Transactional Management. |
 | **Exception Handler** | Se um recurso não for encontrado ou dados forem inválidos, a API não "quebra", mas retorna JSON legível. | **Global Exception Handling** (`@RestControllerAdvice`) e **Java Records**. |
 | **DTOs/Records** | Objetos imutáveis para transporte de dados, protegendo a entidade de domínio de exposição direta. | **Java 17+ Records** (Imutabilidade e concisão). |
+|**Database Seeding** |	População inicial do banco de dados para testes de integração e validação do modelo. | CommandLineRunner e perfil de Teste. |
 | **Documentação** | Exposição dos endpoints para consumo pelo Frontend ou Mobile. | **OpenAPI / Swagger UI**. |
 
 ## Diagrama de Classes e Relacionamentos
