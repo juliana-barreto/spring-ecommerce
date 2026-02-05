@@ -1,10 +1,10 @@
 package com.juliana_barreto.ecommerce.modules.order;
 
 import com.juliana_barreto.ecommerce.modules.user.User;
-import org.springframework.stereotype.Service;
 import com.juliana_barreto.ecommerce.modules.user.UserRepository;
 import com.juliana_barreto.ecommerce.shared.exceptions.ResourceNotFoundException;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class OrderService {
