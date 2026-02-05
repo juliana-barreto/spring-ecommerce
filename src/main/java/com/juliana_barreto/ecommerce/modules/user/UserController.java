@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping(value = "/users")
 @Tag(name = "Users", description = "User management")
 public class UserController {
 
