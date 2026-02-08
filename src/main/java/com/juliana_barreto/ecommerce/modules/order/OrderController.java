@@ -27,7 +27,7 @@ public class OrderController {
   }
 
   @GetMapping
-  @Operation(summary = "List all", description = "Returns all orders")
+  @Operation(summary = "List all", description = "Returns the list of all registered orders")
   public ResponseEntity<List<Order>> list() {
     return ResponseEntity.ok(orderService.findAll());
   }
@@ -54,7 +54,7 @@ public class OrderController {
   }
 
   @DeleteMapping("/{id}")
-  @Operation(summary = "Cancel/Delete order", description = "Removes the order from the system")
+  @Operation(summary = "Cancel/Delete order", description = "Removes an order from the database")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     orderService.delete(id);
     return ResponseEntity.noContent().build();

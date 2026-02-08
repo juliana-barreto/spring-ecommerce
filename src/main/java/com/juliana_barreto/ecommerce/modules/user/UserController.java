@@ -39,7 +39,7 @@ public class UserController {
   }
 
   @PostMapping
-  @Operation(summary = "Create user", description = "Creates a new user with data validation")
+  @Operation(summary = "Create user", description = "Creates a new user")
   public ResponseEntity<User> create(@RequestBody User user) {
     User newUser = userService.create(user);
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
