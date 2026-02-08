@@ -1,4 +1,4 @@
-package com.juliana_barreto.ecommerce.modules.product;
+package com.juliana_barreto.ecommerce.modules.category;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.juliana_barreto.ecommerce.modules.product;
+package com.juliana_barreto.ecommerce.modules.category;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,4 +1,4 @@
-package com.juliana_barreto.ecommerce.modules.product;
+package com.juliana_barreto.ecommerce.modules.category;
 
 import com.juliana_barreto.ecommerce.shared.exceptions.ResourceNotFoundException;
 import java.util.List;
