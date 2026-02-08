@@ -1,10 +1,12 @@
 package com.juliana_barreto.ecommerce;
 
+import com.juliana_barreto.ecommerce.modules.category.Category;
+import com.juliana_barreto.ecommerce.modules.category.CategoryRepository;
 import com.juliana_barreto.ecommerce.modules.order.Order;
 import com.juliana_barreto.ecommerce.modules.order.OrderRepository;
 import com.juliana_barreto.ecommerce.modules.order.OrderStatus;
-import com.juliana_barreto.ecommerce.modules.category.Category;
-import com.juliana_barreto.ecommerce.modules.category.CategoryRepository;
+import com.juliana_barreto.ecommerce.modules.product.Product;
+import com.juliana_barreto.ecommerce.modules.product.ProductRepository;
 import com.juliana_barreto.ecommerce.modules.user.User;
 import com.juliana_barreto.ecommerce.modules.user.UserRepository;
 import java.time.Instant;
@@ -26,6 +28,9 @@ public class TestConfig implements CommandLineRunner {
 
   @Autowired
   private CategoryRepository categoryRepository;
+
+  @Autowired
+  private ProductRepository productRepository;
 
   @Override
   public void run(String... args) throws Exception {
@@ -67,10 +72,59 @@ public class TestConfig implements CommandLineRunner {
 
     orderRepository.saveAll(List.of(o1, o2, o3));
 
-    Category cat1 = new Category(null, "Electronics");
-    Category cat2 = new Category(null, "Books");
-    Category cat3 = new Category(null, "Computers");
+    Category cat1 = Category.builder()
+        .name("Electronics")
+        .build();
+
+    Category cat2 = Category.builder()
+        .name("Books")
+        .build();
+
+    Category cat3 = Category.builder()
+        .name("Computers")
+        .build();
 
     categoryRepository.saveAll(List.of(cat1, cat2, cat3));
+
+    Product p1 = Product.builder()
+        .name("The Lord of the Rings")
+        .description("Lorem ipsum dolor sit amet, consectetur.")
+        .price(90.5)
+        .build();
+
+    Product p2 = Product.builder()
+        .name("Smart TV")
+        .description("Nulla eu imperdiet purus. Maecenas ante.")
+        .price(2190.0)
+        .build();
+
+    Product p3 = Product.builder()
+        .name("Macbook Pro")
+        .description("Nam eleifend maximus tortor, at mollis.")
+        .price(1250.0)
+        .build();
+
+    Product p4 = Product.builder()
+        .name("PC Gamer")
+        .description("Donec aliquet odio ac rhoncus cursus.")
+        .price(1200.0)
+        .build();
+
+    Product p5 = Product.builder()
+        .name("Rails for Dummies")
+        .description("Cras fringilla convallis sem vel faucibus.")
+        .price(100.99)
+        .build();
+
+    productRepository.saveAll(List.of(p1, p2, p3, p4, p5));
+
+    p1.getCategories().add(cat2);
+    p2.getCategories().add(cat1);
+    p2.getCategories().add(cat3);
+    p3.getCategories().add(cat3);
+    p4.getCategories().add(cat3);
+    p5.getCategories().add(cat2);
+
+    productRepository.saveAll(List.of(p1, p2, p3, p4, p5));
   }
 }
