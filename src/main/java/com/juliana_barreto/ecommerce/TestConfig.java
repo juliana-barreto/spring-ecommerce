@@ -12,6 +12,7 @@ import com.juliana_barreto.ecommerce.modules.product.Product;
 import com.juliana_barreto.ecommerce.modules.product.ProductRepository;
 import com.juliana_barreto.ecommerce.modules.user.User;
 import com.juliana_barreto.ecommerce.modules.user.UserRepository;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,31 +96,31 @@ public class TestConfig implements CommandLineRunner {
     Product p1 = Product.builder()
         .name("The Lord of the Rings")
         .description("Lorem ipsum dolor sit amet, consectetur.")
-        .price(90.5)
+        .price(new BigDecimal("90.5"))
         .build();
 
     Product p2 = Product.builder()
         .name("Smart TV")
         .description("Nulla eu imperdiet purus. Maecenas ante.")
-        .price(2190.0)
+        .price(new BigDecimal("2190.0"))
         .build();
 
     Product p3 = Product.builder()
         .name("Macbook Pro")
         .description("Nam eleifend maximus tortor, at mollis.")
-        .price(1250.0)
+        .price(new BigDecimal("1250.0"))
         .build();
 
     Product p4 = Product.builder()
         .name("PC Gamer")
         .description("Donec aliquet odio ac rhoncus cursus.")
-        .price(1200.0)
+        .price(new BigDecimal("1200.0"))
         .build();
 
     Product p5 = Product.builder()
         .name("Rails for Dummies")
         .description("Cras fringilla convallis sem vel faucibus.")
-        .price(100.99)
+        .price(new BigDecimal("100.99"))
         .build();
 
     productRepository.saveAll(List.of(p1, p2, p3, p4, p5));
@@ -165,6 +166,7 @@ public class TestConfig implements CommandLineRunner {
 
     Payment pay1 = Payment.builder()
         .moment(Instant.parse("2019-06-10T21:53:07Z"))
+        .order(o1)
         .build();
 
     o1.setPayment(pay1);
