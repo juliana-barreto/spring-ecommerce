@@ -12,8 +12,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -59,5 +59,5 @@ public class User implements Serializable {
   @Setter(AccessLevel.NONE)
   @Builder.Default
   @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Order> orders = new ArrayList<>();
+  private Set<Order> orders = new HashSet<>();
 }
