@@ -15,6 +15,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
@@ -74,9 +76,17 @@ public class Order implements Serializable {
 
   public BigDecimal getTotal() {
     BigDecimal sum = BigDecimal.ZERO;
-    for (OrderItem item : items) {
-      sum = sum.add(item.getSubTotal());
+    if (items != null) {
+      for (OrderItem item : items) {
+        sum = sum.add(item.getSubTotal());
+      }
     }
     return sum;
+  }
+
+  @PrePersist
+  @PreUpdate
+  public void calculateOrderTotal() {
+    this.orderTotal = getTotal();
   }
 }
