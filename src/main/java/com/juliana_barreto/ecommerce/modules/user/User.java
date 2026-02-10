@@ -1,6 +1,5 @@
 package com.juliana_barreto.ecommerce.modules.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.juliana_barreto.ecommerce.modules.order.Order;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -56,7 +55,6 @@ public class User implements Serializable {
   @Column(nullable = false)
   private String password;
 
-  @JsonIgnore
   @Setter(AccessLevel.NONE)
   @Builder.Default
   @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)

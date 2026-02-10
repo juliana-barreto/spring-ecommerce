@@ -1,6 +1,5 @@
 package com.juliana_barreto.ecommerce.modules.order;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.juliana_barreto.ecommerce.modules.order_item.OrderItem;
 import com.juliana_barreto.ecommerce.modules.user.User;
 import jakarta.persistence.CascadeType;
@@ -54,7 +53,6 @@ public class Order implements Serializable {
   @Column(nullable = false, precision = 10, scale = 2)
   private BigDecimal orderTotal;
 
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
   @Column(nullable = false)
   private Instant moment = Instant.now();
 

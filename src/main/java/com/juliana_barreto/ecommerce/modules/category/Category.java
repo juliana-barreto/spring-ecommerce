@@ -1,6 +1,5 @@
 package com.juliana_barreto.ecommerce.modules.category;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.juliana_barreto.ecommerce.modules.product.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,7 +42,6 @@ public class Category implements Serializable {
   @Column(nullable = false, unique = true)
   private String name;
 
-  @JsonIgnore
   @Builder.Default
   @Setter(AccessLevel.NONE)
   @ManyToMany(mappedBy = "categories")

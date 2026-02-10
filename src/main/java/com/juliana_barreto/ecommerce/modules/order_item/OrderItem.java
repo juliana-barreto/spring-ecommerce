@@ -1,6 +1,5 @@
 package com.juliana_barreto.ecommerce.modules.order_item;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.juliana_barreto.ecommerce.modules.order.Order;
 import com.juliana_barreto.ecommerce.modules.product.Product;
 import jakarta.persistence.Column;
@@ -49,7 +48,6 @@ public class OrderItem implements Serializable {
     this.unitPrice = unitPrice;
   }
 
-  @JsonIgnore
   public Order getOrder() {
     return id.getOrder();
   }
