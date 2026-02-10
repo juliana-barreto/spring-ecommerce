@@ -17,7 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/products")
-@Tag(name = "Categories", description = "Category management")
+@Tag(name = "Products", description = "Product management")
 public class ProductController {
 
   private final ProductService productService;
@@ -39,7 +39,7 @@ public class ProductController {
   }
 
   @PostMapping
-  @Operation(summary = "Create product", description = "Creates a new product")
+  @Operation(summary = "Create product", description = "Creates a new product with categories")
   public ResponseEntity<Product> create(@RequestBody Product product) {
     Product newProduct = productService.create(product);
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -48,13 +48,15 @@ public class ProductController {
   }
 
   @PutMapping("/{id}")
-  @Operation(summary = "Update product", description = "Updates product status")
+  @Operation(summary = "Update product",
+      description = "Updates product details and category associations")
   public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product) {
     return ResponseEntity.ok(productService.update(id, product));
   }
 
   @DeleteMapping("/{id}")
-  @Operation(summary = "Delete product", description = "Removes a product from the database")
+  @Operation(summary = "Delete product",
+      description = "Removes a product (only if not linked to orders)")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     productService.delete(id);
     return ResponseEntity.noContent().build();

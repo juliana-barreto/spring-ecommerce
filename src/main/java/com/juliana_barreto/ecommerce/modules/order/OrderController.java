@@ -1,12 +1,12 @@
 package com.juliana_barreto.ecommerce.modules.order;
 
-import java.net.URI;
-import java.util.List;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.net.URI;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -48,15 +48,15 @@ public class OrderController {
   }
 
   @PutMapping("/{id}")
-  @Operation(summary = "Update order", description = "Updates order status")
+  @Operation(summary = "Update order", description = "Updates general order status")
   public ResponseEntity<Order> update(@PathVariable Long id, @RequestBody Order order) {
     return ResponseEntity.ok(orderService.update(id, order));
   }
 
-  @DeleteMapping("/{id}")
-  @Operation(summary = "Cancel/Delete order", description = "Removes an order from the database")
-  public ResponseEntity<Void> delete(@PathVariable Long id) {
-    orderService.delete(id);
-    return ResponseEntity.noContent().build();
+  @PatchMapping("/{id}/cancel")
+  @Operation(summary = "Cancel order",
+      description = "Cancels an order if it hasn't been shipped yet")
+  public ResponseEntity<Order> cancel(@PathVariable Long id) {
+    return ResponseEntity.ok(orderService.cancel(id));
   }
 }

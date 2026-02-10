@@ -54,7 +54,8 @@ public class CategoryController {
   }
 
   @DeleteMapping("/{id}")
-  @Operation(summary = "Delete category", description = "Removes a category from the database")
+  @Operation(summary = "Delete category",
+      description = "Removes a category (only if no products attached)")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     categoryService.delete(id);
     return ResponseEntity.noContent().build();

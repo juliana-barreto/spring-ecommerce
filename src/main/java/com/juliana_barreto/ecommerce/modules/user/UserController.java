@@ -48,13 +48,14 @@ public class UserController {
   }
 
   @PutMapping("/{id}")
-  @Operation(summary = "Update user", description = "Updates only the provided data, keeping the rest")
+  @Operation(summary = "Update user",
+      description = "Updates only the provided data, keeping the rest")
   public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user) {
     return ResponseEntity.ok(userService.update(id, user));
   }
 
   @DeleteMapping("/{id}")
-  @Operation(summary = "Delete user", description = "Removes a user from the database")
+  @Operation(summary = "Delete user", description = "Removes a user (only if they have no orders)")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     userService.delete(id);
     return ResponseEntity.noContent().build();
