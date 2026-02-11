@@ -1,5 +1,6 @@
 package com.juliana_barreto.ecommerce.shared;
 
+import com.juliana_barreto.ecommerce.shared.exceptions.DatabaseException;
 import com.juliana_barreto.ecommerce.shared.exceptions.InvalidDataException;
 import com.juliana_barreto.ecommerce.shared.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,6 +38,22 @@ public class GlobalExceptionHandler {
         LocalDateTime.now(),
         HttpStatus.BAD_REQUEST.value(),
         "Invalid data",
+        ex.getMessage(),
+        request.getRequestURI()
+    );
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+  }
+
+  // Handling for ERROR 400/409
+  @ExceptionHandler(DatabaseException.class)
+  public ResponseEntity<ErrorResponse> databaseError(
+      DatabaseException ex, HttpServletRequest request) {
+
+    ErrorResponse error = new ErrorResponse(
+        LocalDateTime.now(),
+        HttpStatus.BAD_REQUEST.value(), // ou HttpStatus.CONFLICT
+        "Database error",
         ex.getMessage(),
         request.getRequestURI()
     );
