@@ -5,8 +5,10 @@ import com.juliana_barreto.ecommerce.shared.exceptions.InvalidDataException;
 import com.juliana_barreto.ecommerce.shared.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -59,6 +61,29 @@ public class GlobalExceptionHandler {
     );
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+  }
+
+  // Handling for ERROR 422
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ErrorResponse> handleValidationErrors(
+      MethodArgumentNotValidException ex, HttpServletRequest request) {
+
+    // Turn error messages into a single string
+    String errorMessage = ex.getBindingResult()
+        .getFieldErrors()
+        .stream()
+        .map(error -> error.getField() + ": " + error.getDefaultMessage())
+        .collect(Collectors.joining("; "));
+
+    ErrorResponse error = new ErrorResponse(
+        LocalDateTime.now(),
+        HttpStatus.UNPROCESSABLE_ENTITY.value(),
+        "Validation Error",
+        errorMessage,
+        request.getRequestURI()
+    );
+
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
   }
 
   // Handling for ERROR 500
