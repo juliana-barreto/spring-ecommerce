@@ -2,6 +2,7 @@ package com.juliana_barreto.ecommerce.modules.category;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class CategoryController {
 
   @PostMapping
   @Operation(summary = "Create category", description = "Creates a new category")
-  public ResponseEntity<CategoryDTO> create(@RequestBody CategoryDTO dto) {
+  public ResponseEntity<CategoryDTO> create(@Valid @RequestBody CategoryDTO dto) {
     CategoryDTO newDto = categoryService.create(dto);
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}").buildAndExpand(newDto.getId()).toUri();
@@ -49,7 +50,7 @@ public class CategoryController {
 
   @PutMapping("/{id}")
   @Operation(summary = "Update category", description = "Updates category status")
-  public ResponseEntity<CategoryDTO> update(@PathVariable Long id, @RequestBody CategoryDTO dto) {
+  public ResponseEntity<CategoryDTO> update(@PathVariable Long id, @Valid @RequestBody CategoryDTO dto) {
     return ResponseEntity.ok(categoryService.update(id, dto));
   }
 

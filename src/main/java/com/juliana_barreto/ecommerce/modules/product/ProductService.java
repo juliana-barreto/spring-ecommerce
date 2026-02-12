@@ -41,13 +41,6 @@ public class ProductService {
 
   @Transactional
   public ProductDTO create(ProductDTO dto) {
-    // Basic validation
-    if (dto.getName() == null || dto.getName().isBlank()) {
-      throw new IllegalArgumentException("Product name is mandatory.");
-    }
-    if (dto.getPrice() == null) {
-      throw new IllegalArgumentException("Product price is mandatory.");
-    }
 
     Product entity = new Product();
     copyDtoToEntity(dto, entity);
@@ -60,19 +53,10 @@ public class ProductService {
     Product entity = productRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Product not found with ID: " + id));
 
-    // Update simple fields
-    if (dto.getName() != null && !dto.getName().isBlank()) {
-      entity.setName(dto.getName());
-    }
-    if (dto.getDescription() != null && !dto.getDescription().isBlank()) {
-      entity.setDescription(dto.getDescription());
-    }
-    if (dto.getPrice() != null) {
-      entity.setPrice(dto.getPrice());
-    }
-    if (dto.getImgUrl() != null && !dto.getImgUrl().isBlank()) {
-      entity.setImgUrl(dto.getImgUrl());
-    }
+    entity.setName(dto.getName());
+    entity.setDescription(dto.getDescription());
+    entity.setPrice(dto.getPrice());
+    entity.setImgUrl(dto.getImgUrl());
 
     // Update Category Association
     if (dto.getCategories() != null) {

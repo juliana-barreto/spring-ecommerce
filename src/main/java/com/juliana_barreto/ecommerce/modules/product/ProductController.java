@@ -2,6 +2,7 @@ package com.juliana_barreto.ecommerce.modules.product;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class ProductController {
 
   @PostMapping
   @Operation(summary = "Create product", description = "Creates a new product with categories")
-  public ResponseEntity<ProductDTO> create(@RequestBody ProductDTO dto) {
+  public ResponseEntity<ProductDTO> create(@Valid @RequestBody ProductDTO dto) {
     ProductDTO newDto = productService.create(dto);
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}").buildAndExpand(newDto.getId()).toUri();
@@ -50,7 +51,7 @@ public class ProductController {
   @PutMapping("/{id}")
   @Operation(summary = "Update product",
       description = "Updates product details and category associations")
-  public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO dto) {
+  public ResponseEntity<ProductDTO> update(@PathVariable Long id, @Valid @RequestBody ProductDTO dto) {
     return ResponseEntity.ok(productService.update(id, dto));
   }
 

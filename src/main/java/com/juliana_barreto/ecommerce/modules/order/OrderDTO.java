@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.juliana_barreto.ecommerce.modules.order_item.OrderItem;
 import com.juliana_barreto.ecommerce.modules.order_item.OrderItemDTO;
 import com.juliana_barreto.ecommerce.modules.user.UserDTO;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -23,15 +26,21 @@ public class OrderDTO implements Serializable {
   private Instant moment;
 
   private OrderStatus status;
+
+  @NotNull(message = "Client is mandatory.")
   private UserDTO client;
+
+  @Valid
+  @NotEmpty(message = "Order must have at least one item.")
   private List<OrderItemDTO> items = new ArrayList<>();
+
   private BigDecimal total;
 
   public OrderDTO(Order entity) {
     this.id = entity.getId();
     this.moment = entity.getMoment();
     this.status = entity.getStatus();
-    this.client = new UserDTO(entity.getClient()); //
+    this.client = new UserDTO(entity.getClient());
     this.total = entity.getTotal();
 
     // Convert order items from entity to DTO

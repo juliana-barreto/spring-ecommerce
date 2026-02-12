@@ -36,9 +36,6 @@ public class CategoryService {
 
   @Transactional
   public CategoryDTO create(CategoryDTO dto) {
-    if (dto.getName() == null || dto.getName().isBlank()) {
-      throw new IllegalArgumentException("Category name is mandatory.");
-    }
     Category entity = new Category();
     entity.setName(dto.getName());
     entity = categoryRepository.save(entity);
@@ -49,10 +46,7 @@ public class CategoryService {
   public CategoryDTO update(Long id, CategoryDTO dto) {
     Category entity = categoryRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + id));
-
-    if (dto.getName() != null && !dto.getName().isBlank()) {
-      entity.setName(dto.getName());
-    }
+    entity.setName(dto.getName());
     entity = categoryRepository.save(entity);
     return new CategoryDTO(entity);
   }

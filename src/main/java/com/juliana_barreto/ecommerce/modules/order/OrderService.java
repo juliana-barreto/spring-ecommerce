@@ -47,16 +47,13 @@ public class OrderService {
   public OrderDTO create(OrderDTO dto) {
     Order entity = new Order();
 
-    // Validate and fetch Client
-    if (dto.getClient() == null || dto.getClient().getId() == null) {
-      throw new IllegalArgumentException("The order must be associated with an existing user.");
-    }
+    // Fetch and set client
     User client = userRepository.findById(dto.getClient().getId())
         .orElseThrow(() -> new ResourceNotFoundException("Client not found."));
     entity.setClient(client);
 
     // Process Items, linking and ensuring real price from DB
-    if (dto.getItems() != null) {
+    if (dto.getItems() != null && !dto.getItems().isEmpty()) {
       for (OrderItemDTO itemDto : dto.getItems()) {
         Long productId = itemDto.getProductId();
         // Fetch the real product to get the official price

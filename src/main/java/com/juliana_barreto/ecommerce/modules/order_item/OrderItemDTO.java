@@ -2,6 +2,8 @@ package com.juliana_barreto.ecommerce.modules.order_item;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,10 +11,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderItemDTO implements Serializable {
 
+  @NotNull(message = "Product ID is mandatory.")
   private Long productId;
+
+  @NotNull(message = "Product name is mandatory.")
   private String productName;
   private String productImgUrl;
+
+  @NotNull(message = "Quantity is mandatory.")
+  @Positive(message = "Quantity must be greater than zero.")
   private Integer quantity;
+
   private BigDecimal unitPrice;
   private BigDecimal subTotal;
 

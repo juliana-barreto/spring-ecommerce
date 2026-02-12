@@ -2,6 +2,7 @@ package com.juliana_barreto.ecommerce.modules.user;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class UserController {
 
   @PostMapping
   @Operation(summary = "Create user", description = "Creates a new user")
-  public ResponseEntity<UserDTO> create(@RequestBody UserDTO dto) {
+  public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO dto) {
     UserDTO newDto = userService.create(dto);
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}").buildAndExpand(newDto.getId()).toUri();
@@ -50,7 +51,7 @@ public class UserController {
   @PutMapping("/{id}")
   @Operation(summary = "Update user",
       description = "Updates only the provided data, keeping the rest")
-  public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserDTO dto) {
+  public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserDTO dto) {
     return ResponseEntity.ok(userService.update(id, dto));
   }
 

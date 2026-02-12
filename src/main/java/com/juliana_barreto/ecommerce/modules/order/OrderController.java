@@ -2,6 +2,7 @@ package com.juliana_barreto.ecommerce.modules.order;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class OrderController {
 
   @PostMapping
   @Operation(summary = "Create order", description = "Creates a new order for an existing user")
-  public ResponseEntity<OrderDTO> create(@RequestBody OrderDTO dto) {
+  public ResponseEntity<OrderDTO> create(@Valid @RequestBody OrderDTO dto) {
     OrderDTO newDto = orderService.create(dto);
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}").buildAndExpand(newDto.getId()).toUri();
@@ -49,7 +50,7 @@ public class OrderController {
 
   @PutMapping("/{id}")
   @Operation(summary = "Update order", description = "Updates general order status")
-  public ResponseEntity<OrderDTO> update(@PathVariable Long id, @RequestBody OrderDTO dto) {
+  public ResponseEntity<OrderDTO> update(@PathVariable Long id, @Valid @RequestBody OrderDTO dto) {
     return ResponseEntity.ok(orderService.update(id, dto));
   }
 
