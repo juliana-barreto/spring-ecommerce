@@ -1,60 +1,56 @@
-# Sistema de Gestão de Pedidos
+# Sistema de Gestão de Pedidos (E-commerce API)
 
-> API RESTful para orquestração de vendas e fluxo de entregas, focado em regras de negócio complexas e integridade
-> transacional.
+> API RESTful profissional para orquestração de vendas e fluxo de entregas, focada em performance, segurança e integridade transacional.
 
 <div align="center">
-  <img src="https://img.shields.io/badge/language-Java-orange" />
-  <img src="https://img.shields.io/badge/framework-Spring_Boot-green" />
-  <img src="https://img.shields.io/badge/database-PostgreSQL-blue" />
-  <img src="https://img.shields.io/badge/docs-Swagger-brightgreen" />
+  <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white" />
+  <img src="https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white" />
+  <img src="https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white" />
 </div>
 
 ---
 
-## Sobre o Projeto
+## 💻 Sobre o Projeto
+  
+O Sistema de Gestão de Pedidos é uma aplicação backend robusta desenvolvida com **Spring Boot**, projetada para simular o núcleo de um e-commerce escalável.
 
-O Sistema de Gestão de Pedidos é uma aplicação robusta desenvolvida em Java com o framework Spring Boot, focada na
-construção de serviços RESTful escaláveis para gestão de vendas em um e-commerce.
+Este projeto vai além do CRUD básico. Ele implementa um modelo de domínio rico que orquestra o fluxo completo de uma venda: desde a catalogação de produtos e categorias, passando pela emissão de pedidos com itens variados, até o processamento do pagamento e mudança de status de entrega.
 
-Este projeto transcende o CRUD básico. Ele implementa um modelo de domínio rico que orquestra o fluxo completo de uma
-venda: desde a catalogação de produtos e categorias, passando pela emissão de pedidos com itens variados, até o
-processamento do pagamento e mudança de status de entrega. O sistema prioriza a integridade dos dados, regras de negócio
-reais, relacionamentos complexos entre entidades e tratamento global de exceções. O objetivo é demonstrar domínio sobre
-a arquitetura em camadas e boas práticas de modelagem de dados no backend.
+O diferencial técnico está na aplicação de **Boas Práticas de Engenharia de Software**, incluindo tratamento global de exceções, proteção contra vulnerabilidades de segurança (senhas criptografadas), validação estrita de dados e otimização de consultas ao banco de dados (resolução do problema N+1).
 
-## Funcionalidades e Regras de Negócio
+## 🚀 Funcionalidades e Regras de Negócio
 
-A API gerencia todo o ecossistema de pedidos e usuários, documentada via Swagger/OpenAPI.
+| Funcionalidade | Status | Detalhes Técnicos e Regras de Negócio |
+|:---|:---:|:---|
+| **Gestão de Usuários** | ✅ | CRUD completo com **Criptografia de Senha** (BCrypt) e validação de duplicidade de e-mail/CPF. |
+| **Catálogo de Produtos** | ✅ | Relacionamento **Muitos-para-Muitos** entre Produtos e Categorias. |
+| **Orquestração de Pedidos** | ✅ | Criação de pedidos com itens complexos. O preço do item é "congelado" no momento da compra (Histórico de Preço). |
+| **Otimização de Performance** | ✅ | Consultas **JPQL customizadas** com `JOIN FETCH` para evitar o problema de N+1 Selects em listagens grandes. |
+| **Fluxo de Pagamento** | ✅ | Associação 1:1 estrita entre Pedido e Pagamento usando `@MapsId`. |
+| **Validação de Dados** | ✅ | Uso de **Bean Validation** (`@NotNull`, `@Size`, `@Email`) para garantir a integridade da entrada antes do processamento. |
+| **Tratamento de Erros** | ✅ | Respostas de erro padronizadas (JSON) via `ControllerAdvice`, convertendo exceções Java em status HTTP corretos (404, 422, 500). |
 
-| Funcionalidade           | Status | Descrição                                                                                                |
-|:-------------------------|:------:|:---------------------------------------------------------------------------------------------------------|
-| **Gestão de Usuários**   |   ✅    | Cadastro completo com validação de dados, garantindo integridade de CPF, Email, Telefone e Senha.        |
-| **Catálogo de Produtos** |   ✅    | Gerenciamento de produtos e categorização, permitindo organização flexível do inventário.                |
-| **Ciclo de Pedidos**     |   ✅    | Criação de pedidos com itens associados e vínculo automático ao cliente.                                 |
-| **Fluxo de Pagamento**   |   ✅    | Associação 1:1 entre Pedido e Pagamento, registrando o momento exato da transação financeira.            |
-| **Cálculo Automático**   |   ✅    | O sistema calcula o subtotal (preço do produto x quantidade) e o total do pedido diretamente no domínio. |
-| **Status de Pedido**     |   ✅    | Controle de fluxo via Enum (Aguardando Pagamento -> Entregue).                                           |
-| **Tratamento de Erros**  |   ✅    | Respostas de erro padronizadas (JSON) para 404, 400 e 500 via `ControllerAdvice`.                        |
+## 🛠 Arquitetura e Tecnologias
 
-## Arquitetura e Conceitos Técnicos
+A aplicação segue o padrão de arquitetura em camadas (Layered Architecture), garantindo desacoplamento e testabilidade.
 
-A aplicação segue o padrão de arquitetura em camadas, garantindo separação de responsabilidades e desacoplamento entre
-as regras de negócio e a camada de acesso a dados.
+* **Linguagem:** Java 21
+* **Framework:** Spring Boot 3
+* **Dados:** Spring Data JPA (Hibernate)
+* **Banco de Dados:** PostgreSQL (Produção) / H2 (Testes)
+* **Segurança:** Spring Security (PasswordEncoder)
+* **Utilitários:** Lombok, Java Records
+* **Documentação:** OpenAPI (Swagger)
 
-| Componente Backend     | Regra de Negócio                                                                                         | Conceito Técnico Aplicado                                                   |
-|:-----------------------|:---------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------|
-| **Entidades (Domain)** | Mapeamento das tabelas do banco e relacionamentos (1:N).                                                 | **JPA/Hibernate** (`@Entity`, `@OneToMany`) e **Lombok**.                   |
-| **Service Layer**      | Regras de negócio, como buscar usuário antes de criar pedido e calcular totais.                          | **Injeção de Dependência** e Transactional Management.                      |
-| **Exception Handler**  | Se um recurso não for encontrado ou dados forem inválidos, a API não "quebra", mas retorna JSON legível. | **Global Exception Handling** (`@RestControllerAdvice`) e **Java Records**. |
-| **DTOs/Records**       | Objetos imutáveis para transporte de dados, protegendo a entidade de domínio de exposição direta.        | **Java 17+ Records** (Imutabilidade e concisão).                            |
-| **Database Seeding**   | 	População inicial do banco de dados para testes de integração e validação do modelo.                    | CommandLineRunner e perfil de Teste.                                        |
-| **Documentação**       | Exposição dos endpoints para consumo pelo Frontend ou Mobile.                                            | **OpenAPI / Swagger UI**.                                                   |
+### Destaques de Código
 
-## Diagrama de Classes e Relacionamentos
+* **DTO Pattern:** Separação estrita entre Entidades de Persistência e Objetos de Transferência de Dados, evitando exposição de dados sensíveis (ex: senha) no JSON de resposta.
+* **Imutabilidade:** Uso de Java Records para respostas de erro e objetos de valor.
+* **Clean Code:** Métodos coesos, variáveis descritivas e uso de `Pageable` para paginação de resultados.
 
-A estrutura do domínio reflete um sistema de alta coesão, com relacionamentos fortes entre Clientes, Pedidos, Itens de
-Pedido e o Catálogo de Produtos:
+## 📊 Diagrama de Domínio
+
+A estrutura reflete um sistema de alta coesão:
 
 ```mermaid
 classDiagram
@@ -62,53 +58,43 @@ class User {
   +Long id
   +String name
   +String email
-  +String phone
-  +String cpf
   +String password
   +List~Order~ orders
 }
 class Order {
   +Long id
   +Instant moment
-  +OrderStatus orderStatus
+  +OrderStatus status
   +User client
   +Payment payment
   +List~OrderItem~ items
-  +Double total()
+  +BigDecimal total()
+}
+class Product {
+  +Long id
+  +String name
+  +String description
+  +BigDecimal price
+  +String imgUrl
+  +List~Category~ categories
+  +List~OrderItem~ items
 }
 class Category {
   +Long id
   +String name
   +List~Product~ products
 }
-class Product {
-  +Long id
-  +String name
-  +String description
-  +Double price
-  +String imgUrl
-  +List~Category~ categories
-  +List~OrderItem~ items
-}
 class OrderItem {
   +Integer quantity
-  +Double price
+  +BigDecimal price
   +Product product
   +Order order
-  +Double subTotal()
+  +BigDecimal subTotal()
 }
 class Payment {
   +Long id
   +Instant moment
   +Order order
-}
-class OrderStatus {
-  <<enumeration>>
-  WAITING_PAYMENT
-  PAID
-  SHIPPED
-  DELIVERED
-  CANCELED
 }
 
 User "1" --> "*" Order : client
@@ -116,56 +102,51 @@ Order "1" --> "0..1" Payment : payment
 Order "1" --> "*" OrderItem : items
 OrderItem "*" --> "1" Product : product
 Product "*" -- "*" Category : categories
-Order ..> OrderStatus : uses
+```
+## 📦 Estrutura de Pacotes
+A organização é modular por domínio (modules), facilitando a manutenção:
+
+```plaintext
+
+com.juliana_barreto.ecommerce
+├── modules
+│   ├── user        # Controller, Service, Repository, DTO
+│   ├── order       # Lógica de Pedidos e Pagamentos
+│   ├── order_item  # Itens de pedido e Chaves Compostas
+│   ├── product     # Produtos
+│   └── category    # Categorias
+├── shared
+│   ├── exceptions  # Exceções Customizadas 
+│   └── infra       # Configurações
+└── EcommerceApplication.java
 ```
 
-## Estrutura do Projeto
-A organização de pacotes é modular, facilitando a escalabilidade do sistema:
+## ▶️ Como Executar
+### Pré-requisitos
+- Java 21
+- Maven
 
-```Plaintext
-📦 com.juliana_barreto.ecommerce
- ┣ 📂 modules
- ┃ ┣ 📂 user            # Controller, Service, Repository e Entity de Usuário
- ┃ ┣ 📂 order           # Lógica de Pedidos, Pagamentos e Itens
- ┃ ┗ 📂 product         # Gestão de Produtos e Categorias
- ┣ 📂 shared
- ┃ ┣ 📂 config          # Configurações de segurança e seeding (TestConfig)
- ┃ ┣ 📂 exceptions      # Exceções personalizadas
- ┃ ┗ 📜 GlobalExceptionHandler.java
- ┗ 📜 EcommerceApplication.java
-```
-
-## Impacto Técnico e Métricas
-
-| Indicador              | Detalhe                                                           |
-|:-----------------------|:------------------------------------------------------------------|
-| **Endpoints**          | ~15 Endpoints REST (CRUDs completos + Operações de Associação)    |
-| **Confiabilidade**     | Tratamento centralizado de erros HTTP e validação de input        |
-| **Padrões de Projeto** | Singleton (Beans), Factory (implícito no Spring), Strategy (Auth) |
-| **ORM**                | Hibernate com Spring Data JPA                                     |
-| **Persistência**       | Banco Relacional (Postgres)                                       |
-
-### Como Executar
-
+### Passo a Passo
 1. Clone o repositório:
 
-```bash
-git clone [https://github.com/SEU-USUARIO/ecommerce-backend.git](https://github.com/SEU-USUARIO/ecommerce-backend.git)
+```Bash
+git clone [https://github.com/SEU-USUARIO/ecommerce-backend.git](https://github.com/SEU-USUARIO/spring-ecommerce.git)
+cd spring-ecommerce
 ```
 
-2. Configure o banco de dados no arquivo src/main/resources/application.properties.
+2. Configure as Variáveis de Ambiente:
+Por segurança, a senha do banco de dados não está hardcoded. Defina a variável DB_PASSWORD no seu sistema ou IDE.
 
-3. Execute o projeto via Maven:
+- Exemplo (Linux/Mac): `export DB_PASSWORD=sua_senha_local`
+- Exemplo (Windows): `set DB_PASSWORD=sua_senha_local`
+
+3. Execute a aplicação:
 
 ```Bash
 ./mvnw spring-boot:run
 ```
 
-4. Acesse a documentação da API (Swagger):
+4. Acesse a Documentação (Swagger):
+5. Abra o navegador em: `http://localhost:8080/swagger-ui.html`
 
-```Plaintext
-
-http://localhost:8080/swagger-ui.html
-```
-
-<div align="center">Desenvolvido com ❤️ por Juliana Barreto.</div>
+<div align="center"> Desenvolvido com ☕ e Spring Boot por <strong>Juliana Barreto</strong>. </div>
