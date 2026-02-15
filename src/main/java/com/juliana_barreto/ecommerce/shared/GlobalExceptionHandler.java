@@ -1,12 +1,14 @@
 package com.juliana_barreto.ecommerce.shared;
 
+import com.juliana_barreto.ecommerce.FieldMessage;
 import com.juliana_barreto.ecommerce.shared.exceptions.BusinessException;
 import com.juliana_barreto.ecommerce.shared.exceptions.DatabaseException;
 import com.juliana_barreto.ecommerce.shared.exceptions.InvalidDataException;
 import com.juliana_barreto.ecommerce.shared.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -69,19 +71,20 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleValidationErrors(
       MethodArgumentNotValidException ex, HttpServletRequest request) {
 
-    // Turn error messages into a single string
-    String errorMessage = ex.getBindingResult()
-        .getFieldErrors()
-        .stream()
-        .map(error -> error.getField() + ": " + error.getDefaultMessage())
-        .collect(Collectors.joining("; "));
+    List<FieldMessage> fieldErrors = new ArrayList<>();
+
+    // Fills the list with each error found by Bean Validation
+    for (org.springframework.validation.FieldError f : ex.getBindingResult().getFieldErrors()) {
+      fieldErrors.add(new FieldMessage(f.getField(), f.getDefaultMessage()));
+    }
 
     ErrorResponse error = new ErrorResponse(
         LocalDateTime.now(),
         HttpStatus.UNPROCESSABLE_ENTITY.value(),
         "Validation Error",
-        errorMessage,
-        request.getRequestURI()
+        "There are validation errors in the fields below",
+        request.getRequestURI(),
+        fieldErrors
     );
 
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
