@@ -1,4 +1,4 @@
-package com.juliana_barreto.ecommerce;
+package com.juliana_barreto.ecommerce.shared;
 
 public record FieldMessage(String field, String message) {
 

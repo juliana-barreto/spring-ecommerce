@@ -1,6 +1,5 @@
 package com.juliana_barreto.ecommerce.shared;
 
-import com.juliana_barreto.ecommerce.FieldMessage;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

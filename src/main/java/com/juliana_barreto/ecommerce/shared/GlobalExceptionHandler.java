@@ -1,6 +1,5 @@
 package com.juliana_barreto.ecommerce.shared;
 
-import com.juliana_barreto.ecommerce.FieldMessage;
 import com.juliana_barreto.ecommerce.shared.exceptions.BusinessException;
 import com.juliana_barreto.ecommerce.shared.exceptions.DatabaseException;
 import com.juliana_barreto.ecommerce.shared.exceptions.InvalidDataException;
