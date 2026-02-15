@@ -3,6 +3,8 @@ package com.juliana_barreto.ecommerce.modules.product;
 import com.juliana_barreto.ecommerce.modules.category.Category;
 import com.juliana_barreto.ecommerce.modules.category.CategoryDTO;
 import com.juliana_barreto.ecommerce.modules.category.CategoryRepository;
+import com.juliana_barreto.ecommerce.modules.order.Order;
+import com.juliana_barreto.ecommerce.modules.order.OrderRepository;
 import com.juliana_barreto.ecommerce.shared.exceptions.DatabaseException;
 import com.juliana_barreto.ecommerce.shared.exceptions.ResourceNotFoundException;
 import java.util.ArrayList;
@@ -16,10 +18,12 @@ public class ProductService {
 
   private final ProductRepository productRepository;
   private final CategoryRepository categoryRepository;
+  private final OrderRepository orderRepository;
 
-  public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+  public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, OrderRepository orderRepository) {
     this.productRepository = productRepository;
     this.categoryRepository = categoryRepository;
+    this.orderRepository = orderRepository;
   }
 
   @Transactional(readOnly = true)
@@ -78,11 +82,18 @@ public class ProductService {
     if (!productRepository.existsById(id)) {
       throw new ResourceNotFoundException("Product not found for deletion.");
     }
+
+    List<Order> orders = orderRepository.findOrdersByProductId(id);
+    if (!orders.isEmpty()) {
+      throw new DatabaseException(
+          "Integrity violation: Unable to delete product because it is part of existing orders.");
+    }
+
     try {
       productRepository.deleteById(id);
     } catch (DataIntegrityViolationException e) {
       throw new DatabaseException(
-          "Integrity violation: Unable to delete product because it is part of existing orders.");
+          "Integrity violation: Something went wrong during deletion.");
     }
   }
 
