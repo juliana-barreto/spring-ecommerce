@@ -20,7 +20,8 @@ public class ProductService {
   private final CategoryRepository categoryRepository;
   private final OrderRepository orderRepository;
 
-  public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, OrderRepository orderRepository) {
+  public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository,
+      OrderRepository orderRepository) {
     this.productRepository = productRepository;
     this.categoryRepository = categoryRepository;
     this.orderRepository = orderRepository;
@@ -28,7 +29,7 @@ public class ProductService {
 
   @Transactional(readOnly = true)
   public List<ProductDTO> findAll() {
-    List<Product> entities = productRepository.findAll();
+    List<Product> entities = productRepository.findAllWithCategories();
     List<ProductDTO> dtos = new ArrayList<>();
     for (Product entity : entities) {
       dtos.add(new ProductDTO(entity));
@@ -38,7 +39,7 @@ public class ProductService {
 
   @Transactional(readOnly = true)
   public ProductDTO findById(Long id) {
-    Product entity = productRepository.findById(id)
+    Product entity = productRepository.findByIdWithCategories(id)
         .orElseThrow(() -> new ResourceNotFoundException("Product not found with ID: " + id));
     return new ProductDTO(entity);
   }

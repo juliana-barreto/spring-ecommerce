@@ -1,6 +1,7 @@
 package com.juliana_barreto.ecommerce.modules.order;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,5 +26,15 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         JOIN FETCH item.id.product
       """)
   List<Order> findAllWithRelations();
+
+  @Query("""
+          SELECT o
+          FROM Order o
+          JOIN FETCH o.client
+          JOIN FETCH o.items item
+          JOIN FETCH item.id.product
+          WHERE o.id = :id
+      """)
+  Optional<Order> findByIdWithRelations(@Param("id") Long id);
 }
 

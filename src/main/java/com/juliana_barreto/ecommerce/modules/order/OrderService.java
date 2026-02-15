@@ -39,7 +39,7 @@ public class OrderService {
 
   @Transactional(readOnly = true)
   public OrderDTO findById(Long id) {
-    Order entity = orderRepository.findById(id)
+    Order entity = orderRepository.findByIdWithRelations(id)
         .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + id));
     return new OrderDTO(entity);
   }
