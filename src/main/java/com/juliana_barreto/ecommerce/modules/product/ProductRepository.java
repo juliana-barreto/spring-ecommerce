@@ -10,10 +10,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-  @Query("SELECT DISTINCT p FROM Product p JOIN FETCH p.categories WHERE p.id = :id")
+  @Query("""
+      SELECT DISTINCT p 
+      FROM Product p 
+      JOIN FETCH p.categories 
+      WHERE p.id = :id
+      """)
   Optional<Product> findByIdWithCategories(@Param("id") Long id);
 
-  @Query("SELECT DISTINCT p FROM Product p JOIN FETCH p.categories")
+  @Query("""
+      SELECT DISTINCT p 
+      FROM Product p 
+      JOIN FETCH p.categories
+      """)
   List<Product> findAllWithCategories();
-
 }
