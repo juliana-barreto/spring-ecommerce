@@ -1,6 +1,6 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <artifactId>spring-ecommerce</artifactId>
+  <artifactId>order-management-api</artifactId>
   <build>
     <plugins>
       <plugin>
@@ -81,7 +81,7 @@
     <license/>
   </licenses>
   <modelVersion>4.0.0</modelVersion>
-  <name>Ecommerce</name>
+  <name>Order Management API</name>
   <parent>
     <artifactId>spring-boot-starter-parent</artifactId>
     <groupId>org.springframework.boot</groupId>
